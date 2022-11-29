@@ -1,3 +1,6 @@
+#!/bin/python3
+
+
 #1- Create directory with the name of project
 #2- Create main.py file inside project directory
 #3- Create python virtual environment
@@ -7,8 +10,9 @@
 
 import sys                   # Allows us to add more arguments when running the app in terminal
 import subprocess            # Allows us to run mkdir,touch, cd, ls, cat
-print(sys.argv)
+# print(sys.argv)
 # print(sys.argv[1])
+
 argv = sys.argv
 
 
@@ -16,6 +20,17 @@ def main():
     if len(argv) != 2:
         print("Please pass project name")
         sys.exit()
+
+    if argv[1] == "--help" or argv[1] == "-h":
+        print("""
+Usage: main.py [OPTION]... [PROJECT]...
+Generate python project at /jurgenmane/dev/
+
+--help     display this help and exit
+""")
+        sys.exit()
+
+    
 
     project_name = "/home/jurgenmane/dev/" + argv[1]
     subprocess.run(["mkdir", project_name])
