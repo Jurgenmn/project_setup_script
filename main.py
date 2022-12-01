@@ -17,7 +17,11 @@ argv = sys.argv
 
 
 def main():
-    if len(argv) != 2:
+    debug = False
+    vscode = False
+
+
+    if len(argv) < 2:
         print("Please pass project name")
         sys.exit()
 
@@ -30,33 +34,63 @@ Generate python project at /jurgenmane/dev/
 """)
         sys.exit()
 
+    if "-d" in argv or "--debug" in argv:
+        debug = True
+
     
+    if "-v" in argv or "--vscode" in argv:
+        vscode = True 
 
-    project_name = "/home/jurgenmane/dev/" + argv[1]
-    subprocess.run(["mkdir", project_name])
+    
+    #argv = ["./main.py", "-v", "--debug", "test"]
 
+    name = None
+    for arg in argv:
+        if arg[0] != "-" and arg != "./main.py":
+          name = arg  
+
+    if name != None:
+        project_name = "/home/jurgenmane/dev/" + name # name of project
+
+
+
+    subprocess.run(["mkdir", project_name], capture_output=True)
+
+    if debug:
+        print("Creating project at " + project_name)
+
+        
     main_file = project_name + "/main.py"
-    subprocess.run(["touch", main_file])
+    subprocess.run(["touch", main_file], capture_output=True)
+    if debug:
+        print("Creating main.py file at " + main_file )
+
 
     virtual_env = project_name + "/venv"
-    subprocess.run(["python3", "-m", "venv", virtual_env])
+    subprocess.run(["python3", "-m", "venv", virtual_env], capture_output=True)
+    if debug:
+        print("Creating virtual environment at "+ virtual_env)
 
-    requiremnt_file = project_name + "/requirement.txt"
-    print(requiremnt_file)
-    subprocess.run(["touch", requiremnt_file])
 
-    subprocess.run(["git", "init", project_name])
+    requirement_file = project_name + "/requirement.txt"
+    subprocess.run(["touch", requirement_file], capture_output=True)
+    if debug:
+        print("Creating requirement file at " + requirement_file)
+
+    subprocess.run(["git", "init", project_name], capture_output=True)
+    if debug:
+        print("Creating git repository at" + project_name)
 
     file = open(main_file, "w")
     main_function = "def main():\n\n\n\n\n\nmain()"
     file.write(main_function)
+    if debug:
+        print("Writing main function at " + main_file + " ...")
 
     #subprocess.run(["echo", main_function, ">>", main_file])
 
-    subprocess.run(["code", project_name])
-
-
-
+    if vscode:
+        subprocess.run(["code", project_name])
 
 
 main()        
